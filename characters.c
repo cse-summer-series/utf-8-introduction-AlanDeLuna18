@@ -51,11 +51,28 @@ unsigned int utf8_strlen(char* unicode) {
  *   bytes_for("成龙", 2) -> 6
  *   bytes_for("成龙", 3) -> -1
  */
-unsigned int bytes_for(char* unicode, unsigned int n) {
-  return 0;
+unsigned int bytes_for(char* unicode, unsigned int n) 
+{
+
+  if(n > utf8_strlen(unicode) || n < 0)
+  {
+    return -1; 
+  } 
+  
+  unsigned int charsSeen = 0;
+  unsigned int bytesSeen = 0;  
+  unsigned int totalChars = utf8_strlen(unicode); 
+  while(charsSeen < n)
+  {
+    unsigned int currentBytes = num_bytes(unicode[bytesSeen]);
+    bytesSeen += currentBytes; 
+    charsSeen++; 
+  }
+  return bytesSeen;
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char** argv) 
+{
   if(argc < 2) {
     printf("Try running with ./welcome your-name\n");
     return 1;
@@ -67,10 +84,18 @@ int main(int argc, char** argv) {
   printf("The number of bytes needed for the first character are: %c\n", name[0]);
 
   printf("The invididual characters are: \n");
-  for(int i = 0; i < length; i += 1) {
+  for(int i = 0; i < length; i += 1) 
+  {
     unsigned char letter = name[i];
     printf("%d(%x) ", letter, letter);
   }
+
+  int max; 
+  printf("\nHow many letters in %s do you need to calculate the bits?: ", name); 
+  scanf("%d", &max); 
+  printf("%s has %d many bits inside of it\n", name, bytes_for(name, max));
+
+
   printf("\n");
 
   return 0;
